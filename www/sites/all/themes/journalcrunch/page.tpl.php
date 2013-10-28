@@ -37,7 +37,8 @@
         <div id="topSocial">
         <ul>                  
         <li><a class="twitter tip" href="http://twitter.com/rafruppel" title="Follow Us on Twitter!"></a></li>
-        <li><a class="rss" href="rss" title="Subcribe to Our RSS Feed"></a></li>
+		<li><a class="linkedin tip" href="http://www.linkedin.com/pub/rafael-ruppel-ruiz/13/711/744" title="Veja meu perfil LinkedIn"></a></li>
+		<li><a class="rss" href="rss" title="Subcribe to Our RSS Feed"></a></li>
         </ul>
         </div>
     

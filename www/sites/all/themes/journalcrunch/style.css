@@ -352,3 +352,10 @@ margin: 0; outline: 0 none; padding: 0 15px 0 0; text-indent: -9999px; width: 10
 a.mtt:link, a.mtt:active, a.mtt:visited, a.mtt:hover  {
 background: url("images/footer-logo-mtt.png") no-repeat scroll center top transparent; display: block; float: left; height: 45px; 
 margin: 0; outline: 0 none; padding: 0; text-indent: -9999px; width: 95px; }
+
+/* my mods */
+#site-name a{ color: black; }
+
+#topSocial ul li a.linkedin { background:url(images/ico_social_linkedin.png) 0 0 no-repeat; }
+
+#topSocial ul li a.linkedin:hover { background-position:0 -49px; }
