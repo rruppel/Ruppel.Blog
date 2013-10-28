@@ -36,9 +36,8 @@
         
         <div id="topSocial">
         <ul>                  
-        <li><a class="twitter tip" href="http://twitter.com/morethanthemes" title="Follow Us on Twitter!"></a></li>
-        <li><a class="facebook" href="http://www.facebook.com/pages/More-than-just-themes/194842423863081" title="Join Us on Facebook!"></a></li>
-        <li><a class="rss" href="#" title="Subcribe to Our RSS Feed"></a></li>
+        <li><a class="twitter tip" href="http://twitter.com/rafruppel" title="Follow Us on Twitter!"></a></li>
+        <li><a class="rss" href="rss" title="Subcribe to Our RSS Feed"></a></li>
         </ul>
         </div>
     
@@ -123,13 +122,6 @@
         
     <div id="footer-message">
         <?php print render($page['footer']); ?>
-        Ported to Drupal for the Open Source Community by <a href="http://www.drupalizing.com">Drupalizing</a>, a Project of <a href="http://www.morethanthemes.com">More than (just) Themes</a>
-        <div class="footer-logos clearfix">
-        <a href="http://www.smashingmagazine.com/2010/12/09/journalcrunch-wordpress-3-0-theme-free-theme-for-portfolios-and-magazines/" class="smashing">SmashingMagazine</a>
-        <a href="http://www.site5.com/" class="site5" title="Site5">Site5</a>
-        <a href="http://www.drupalizing.com" class="drupalizing" title="Drupalizing">Drupalizing</a>
-        <a href="http://www.morethanthemes.com" class="mtt" title="More than (just) Themes">More than (just) Themes</a>
-        </div>
     </div>
     
     </div>
