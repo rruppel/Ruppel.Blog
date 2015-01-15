@@ -1,0 +1,5 @@
+## YAML Template.
+services:
+    example.example_calculator:
+        class: Drupal\example\ExampleCalculator
+        arguments: ['@state']

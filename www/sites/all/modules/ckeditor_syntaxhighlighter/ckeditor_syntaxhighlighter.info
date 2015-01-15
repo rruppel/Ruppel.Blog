@@ -1,0 +1,13 @@
+name = CKEditor SyntaxHighlighter
+description = Sytax highlighter for CKEditor.
+package = User interface
+core = 7.x
+configure = admin/config/content/ckeditor_syntaxhighlighter
+
+dependencies[] = ckeditor
+
+version = "7.x-1.0"
+core = "7.x"
+project = "ckeditor_syntaxhighlighter"
+datestamp = "1386680871"
+

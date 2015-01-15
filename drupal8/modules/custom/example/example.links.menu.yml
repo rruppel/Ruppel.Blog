@@ -1,0 +1,6 @@
+## YAML Template.
+example.config:
+    title: 'Configure Example module'
+    description: 'Link to configure the example module in the admin'
+    route_name: 'example.config'
+    parent: system.admin_config_system

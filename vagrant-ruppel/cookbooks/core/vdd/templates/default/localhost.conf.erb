@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+  DocumentRoot /var/www/
+  ServerName localhost
+  RewriteEngine On
+  ErrorLog /var/log/apache2/error.log
+  LogLevel warn
+  CustomLog /var/log/apache2/access.log combined
+  ServerSignature On
+</VirtualHost>
+
+<VirtualHost *:80>
+  DocumentRoot /var/drupal8/
+  ServerName drupal8.dev
+  RewriteEngine On
+  ErrorLog /var/log/apache2/error-d8.log
+  LogLevel warn
+  CustomLog /var/log/apache2/access-d8.log combined
+  ServerSignature On
+</VirtualHost>
+
+
+<VirtualHost *:80>
+  DocumentRoot /var/wordpress/
+  ServerName wordpress.dev
+  RewriteEngine On
+  ErrorLog /var/log/apache2/error-w.log
+  LogLevel warn
+  CustomLog /var/log/apache2/access-w.log combined
+  ServerSignature On
+</VirtualHost>

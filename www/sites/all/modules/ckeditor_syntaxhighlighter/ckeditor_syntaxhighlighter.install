@@ -1,0 +1,15 @@
+<?php
+
+
+
+function ckeditor_syntaxhighlighter_uninstall(){ 
+  //Delete all variables (dynamic)
+  $prefix = "ckeditor_syntaxhighlighter_";
+  $result = db_query(
+      'SELECT name FROM {variable} WHERE name LIKE :pattern',
+  array(':pattern' => db_like($prefix) . '%')
+  );
+  foreach($result as $row){
+    variable_del($row->name);
+  }
+}

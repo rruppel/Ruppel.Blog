@@ -1,0 +1,18 @@
+## YAML Template.
+example.firstRoute:
+    path: /add/{one}/{two}
+    defaults:
+        _content: 'Drupal\example\Controller\ExampleController:add'
+        _title: 'Soma'
+        one: false
+        two: false
+    requirements:
+        _permission: 'access content'
+        
+example.config:
+    path: /admin/config/system/example
+    defaults:
+        _form: 'Drupal\example\Form\ConfigForm'
+        _title: 'Example Configuration'
+    requirements:
+        _permission: 'configure example'

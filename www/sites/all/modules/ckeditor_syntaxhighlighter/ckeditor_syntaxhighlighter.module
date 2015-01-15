@@ -1,0 +1,151 @@
+<?php
+
+
+/**
+ * Inject syntaxhighlighter library on every page except the listed pages.
+ */
+define('CKEDITOR_SYNTAXHIGHLIGHTER_INJECT_EXCEPT_LISTED', 0);
+
+/**
+ * Inject syntaxhighlighter library on only the listed pages.
+ */
+define('CKEDITOR_SYNTAXHIGHLIGHTER_INJECT_IF_LISTED', 1);
+
+
+
+/**
+* Menu for admin settings page
+*/
+function ckeditor_syntaxhighlighter_menu() {
+  $items['admin/config/content/ckeditor_syntaxhighlighter'] = array(
+    'title' => 'Syntax highlighter for CKEditor',
+    'description' => 'Configure syntax highlighter for CKEditor',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ckeditor_syntaxhighlighter_settings_form'),
+    'access arguments' => array('administer modules'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'ckeditor_syntaxhighlighter.admin.inc',
+  );
+
+  return $items;
+}
+
+function ckeditor_syntaxhighlighter_ckeditor_plugin() {  
+  return array(
+    'syntaxhighlight' => array(
+      // Name of the plugin used to write it.
+      'name' => 'syntaxhighlight',
+      // Description of the plugin - it would be displayed in the plugins management section of profile settings. 
+      'desc' => t('Syntax Highlighter for CKEditor'),
+      // The full path to the CKEditor plugins directory, with the trailing slash. 
+      //'path' => drupal_get_path('module', 'ckeditor_syntaxhighlighter') . '/plugins/syntaxhighlight/',
+      'path' => substr(ckeditor_syntaxhighlighter_plugin_path('relative'), 1) . "/",
+      'buttons' => array(
+        'Syntaxhighlight' => array(
+          'icon' => 'icons/syntaxhighlight.png', 
+          'label' => 'syntaxhighlight',
+        ),
+      ),
+    ),
+  );
+}
+
+
+function ckeditor_syntaxhighlighter_init() {
+	
+	if(!_ckeditor_syntaxhighlighter_page_match()){
+	   return;
+	}
+	
+	$library_final_path = ckeditor_syntaxhighlighter_library_path('local');
+	$library_styles_path = $library_final_path . '/styles/';
+	$library_scripts_path = $library_final_path . '/scripts/';
+	$js_options = array('type' => 'file', 'group' => JS_DEFAULT, 'every_page' => TRUE);
+	
+	//load base css and theme selected
+	drupal_add_css($library_styles_path . 'shCore.css');
+	$theme = variable_get('ckeditor_syntaxhighlighter_theme', 'shThemeDefault.css');
+	drupal_add_css($library_styles_path . $theme);
+	
+	//Load library itself
+	drupal_add_js($library_scripts_path . 'shCore.js', $js_options);
+	
+	//Add autoloader
+	drupal_add_js($library_scripts_path . 'shAutoloader.js', $js_options);
+
+	$settings = array(
+		"library_path_scrpits" => ckeditor_syntaxhighlighter_library_path('relative') . '/scripts/',
+	);
+	if (isset($settings)) {
+		drupal_add_js(array('ckeditor_syntaxhighlighter' => $settings), 'setting');
+	}
+	
+	//add custom javascript configuration
+	if ($defaultExpression = variable_get('syntaxhighlighter_default_expressions', '')) {
+		drupal_add_js($defaultExpression, 'inline');
+	}
+
+	//Add js to initialize and configure the library
+	//TODO create a min version of the js file
+	drupal_add_js(drupal_get_path('module', 'ckeditor_syntaxhighlighter') . '/ckeditor_syntaxhighlighter_autoloader.js', array('type' => 'file', 'scope' => 'footer', 'group' => JS_DEFAULT, 'every_page' => TRUE));
+	
+	
+}
+
+//Check when to include syntaxhighlighter library on the load page 
+function _ckeditor_syntaxhighlighter_page_match() {
+	$_inject_if_listed = variable_get('ckeditor_syntaxhighlighter_inject', CKEDITOR_SYNTAXHIGHLIGHTER_INJECT_EXCEPT_LISTED);
+	$pages = variable_get('ckeditor_syntaxhighlighter_pages', "admin\nadmin/*\nuser\nuser/*\nimce\nimce/*\n");
+	$path = drupal_get_path_alias($_GET['q']);
+	//Compare path and alias
+	$page_match = drupal_match_path($path, $pages);
+	if ($path != $_GET['q']) {
+		$page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+	}
+	return !($_inject_if_listed xor $page_match);
+}
+
+
+/**
+* Generate module path of the CKEditor Syntaxhighlighter module.
+* 
+* Code from ckeditor module
+*
+* @return
+*   Path of CKEditor Syntaxhighlighter module.
+*/
+function ckeditor_syntaxhighlighter_module_path($mode = 'relative') {
+  switch ($mode) {
+    default:
+    case 'relative':
+      return ckeditor_base_path('relative') . '/' . drupal_get_path('module', 'ckeditor_syntaxhighlighter');
+    case 'local':
+      return ckeditor_base_path('local') . '/' . drupal_get_path('module', 'ckeditor_syntaxhighlighter');
+    case 'url':
+      return drupal_get_path('module', 'ckeditor_syntaxhighlighter');
+  }
+}
+
+
+
+function ckeditor_syntaxhighlighter_plugin_path($mode = 'relative', $refresh = FALSE) {
+  $_plugin_path = variable_get('ckeditor_syntaxhighlighter_plugin_path','%m/plugins/syntaxhighlight');
+  
+  $_plugin_path = strtr($_plugin_path, array("%b" => ckeditor_base_path($mode), "%m" => ckeditor_syntaxhighlighter_module_path($mode), "%l" => ckeditor_library_path($mode)));
+  $_plugin_path = str_replace('\\', '/', $_plugin_path);
+  $_plugin_path = str_replace('//', '/', $_plugin_path);
+  
+  return $_plugin_path;
+}
+
+
+
+function ckeditor_syntaxhighlighter_library_path($mode = 'relative', $refresh = FALSE) {
+  $_library_path = variable_get('ckeditor_syntaxhighlighter_library_path','%m/library/syntaxhighlighter_3.0.83');
+
+  $_library_path = strtr($_library_path, array("%b" => ckeditor_base_path($mode), "%m" => ckeditor_syntaxhighlighter_module_path($mode), "%l" => ckeditor_library_path($mode)));
+  $_library_path = str_replace('\\', '/', $_library_path);
+  $_library_path = str_replace('//', '/', $_library_path);
+
+  return $_library_path;
+}

@@ -1,0 +1,11 @@
+## YAML Template.
+example.settings:
+    type: mapping
+    label: 'Example module settings'
+    mapping:
+        default_one:
+            type: integer
+            label: 'Default one'
+        default_two:
+            type: integer
+            label: 'Default two'

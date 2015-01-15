@@ -1,0 +1,154 @@
+<?php
+
+/**
+ * @file
+ * Profile module that customizes navbar
+ */
+
+/**
+ * Implements hook_library_alter().
+ */
+function navbar_awesome_library_alter(&$libraries, $module) {
+  if ($module == 'navbar') {
+    // Remove navbar's icon CSS.
+    unset($libraries['navbar']['css'][2]);
+  }
+}
+
+/**
+ * Implementation of hook_libraries_info().
+ */
+function navbar_awesome_libraries_info() {
+  $libraries['fontawesome'] = array(
+    'name' => 'Font Awesome',
+    'vendor url' => 'http://fontawesome.io',
+    'download url' => 'https://github.com/FortAwesome/Font-Awesome/releases',
+    'path' => 'css',
+    'version' => '4.1.0', // @TODO: Move this into version_callback and version_arguments.
+    'files' => array(
+      'css' => array(
+        'font-awesome.min.css',
+      ),
+    ),
+    'variants' => array(
+      'minified' => array(
+        'files' => array(
+          'css' => array(
+            'font-awesome.min.css',
+          ),
+        ),
+      ),
+      'source' => array(
+        'files' => array(
+          'css' => array(
+            'font-awesome.css',
+          ),
+        ),
+      ),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function navbar_awesome_menu() {
+  $items['admin/config/user-interface/navbar-awesome'] = array(
+    'title' => 'Navbar Awesome',
+    'description' => 'Configuration for Navbar Awesome',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('navbar_awesome_configuration'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'navbar_awesome.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function navbar_awesome_page_alter(&$page) {
+
+  // First check if using Libraries to load Font Awesome
+  // @todo: Verify if other contribs are using same naming to prevent overlap.
+  if (module_exists('libraries') && ($library = libraries_detect('fontawesome')) && !empty($library['installed'])) {
+    // Load our library
+    libraries_load('fontawesome');
+  }
+  // If there isn't a library, use the CDN. This can be disabled in case a
+  // theme is providing FontAwesome via CDN and not libraries.
+  elseif (!variable_get('navbar_awesome_cdn', FALSE)) {
+    // Use super awesome CDN.
+    drupal_add_css('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css', array('type' => 'external'));
+  }
+
+  // Roboto for admin and toolbar.
+  // The font is enabled by default and can be disabled through the config form.
+  if (!variable_get('navbar_awesome_roboto', FALSE)) {
+    drupal_add_css('//fonts.googleapis.com/css?family=Roboto:400,400italic,300,500,700', array('group' => CSS_THEME, 'type' => 'external'));
+  }
+
+  // Add custom CSS to provide fix for using FontAwesome icons.
+  drupal_add_css(drupal_get_path('module', 'navbar_awesome') . '/css/navbar-awesome.css');
+  // Add JS behaviors to handle icons for buttons added via JavaScript.
+  drupal_add_js(drupal_get_path('module', 'navbar_awesome') . '/js/navbar-awesome.js');
+}
+
+/**
+ * Implements hook_navbar_alter().
+ */
+function navbar_awesome_navbar_alter(&$items) {
+  // Move the menu item to far left.
+  $items['administration']['#weight'] = -50;
+  $items['administration']['tab']['#options']['attributes']['class'][] = 'fa-bars';
+  // Add icon for home
+  $items['home']['tab']['#options']['attributes']['class'][] = 'fa-home';
+  // Add icon for user
+  $items['user']['tab']['#options']['attributes']['class'][] = 'fa-user';
+
+  // Cycle through the administrative menu.
+  // @todo: Creare a way to check what's been overridden via hook_navbar().
+  $administration_menu =& $items['administration']['tray']['navbar_administration']['administration_menu'];
+  foreach ($administration_menu as $key => $item) {
+    if (!isset($item['#href'])) {
+      continue;
+    }
+
+    // Bring Content up a level.
+    if ($item['#href'] == 'admin/content') {
+      unset($administration_menu[$key]);
+    }
+  }
+  // @todo: replace all default icons!
+  // @todo make options to move items up or down into main menu.
+}
+
+/**
+ * Implements hook_navbar().
+ *
+ * @todo: create way for this to be dynamic via a UI.
+ */
+function navbar_awesome_navbar() {
+
+  // Adds Content to top level
+  // @todo: maybe make this less static? Make it based off actual menu item in
+  //        the management menu?
+  $items['content'] = array(
+    '#type' => 'navbar_item',
+    'tab' => array(
+      '#type' => 'link',
+      '#title' => t('Content'),
+      '#href' => 'admin/content',
+      '#options' => array(
+        'attributes' => array(
+          'title' => t('Content menu'),
+          'class' => array('navbar-icon', 'navbar-icon-content', 'fa-pencil-square-o'),
+        ),
+      ),
+    ),
+    '#weight' => -15,
+  );
+  return $items;
+}

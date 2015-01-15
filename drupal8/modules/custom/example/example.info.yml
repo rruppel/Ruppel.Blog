@@ -1,0 +1,5 @@
+## YAML Template.
+name: Example Module
+description: Modulo de Exemplo
+type: module
+core: 8.x 

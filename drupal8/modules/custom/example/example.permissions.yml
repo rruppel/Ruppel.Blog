@@ -1,0 +1,4 @@
+## YAML Template.
+configure example:
+    title: 'Configure the Example module'
+    Description: 'Allow user to configure the example module'

@@ -1,0 +1,50 @@
+{
+  "ip": "192.168.33.23",
+  "memory": "2048",
+  "synced_folder": {
+    "host_path": "../www",
+    "guest_path": "/var/www",
+	"drupal8_path": "../drupal8",
+	"drupal8_guest_path": "/var/drupal8",
+	"wordpress_path": "../drupal8",
+	"wordpress_guest_path": "/var/wordpress"
+  },
+  "php": {
+    "version": false
+  },
+  "mysql": {
+    "server_root_password": "root",
+	"databases": {
+      "name": "ruppel_blog"
+    }
+  },  
+  "sites": {
+    "drupal7": {
+      "account_name": "root",
+      "account_pass": "root",
+      "account_mail": "box@example.com",
+      "site_name": "Blog do Ruppel",
+      "site_mail": "box@example.com"
+    }
+  },
+  "git": {
+    "user": {
+      "name": "Rafael Ruppel Ruiz",
+      "email": "rafael.ruppel@itelios.com"
+    },
+    "core": {
+      "editor": "vi"
+    },
+    "color": {
+      "ui": true
+    }
+  },
+  "custom_roles": [
+    "itelios"
+  ],
+  "apache":{
+    "site":"ruppel.dev",
+    "default_modules":[
+    ]	
+  }
+}

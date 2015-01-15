@@ -55,3 +55,5 @@ vagrant/.vagrant/machines/default/virtualbox/id
 /www/nbproject/project.properties
 /www/nbproject/project.xml
 /www/sites/all/themes/gpa/compass_app_log.txt
+/drupal8/nbproject/private/
+/nbproject/private/
