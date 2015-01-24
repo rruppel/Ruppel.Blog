@@ -135,7 +135,7 @@ function quickedit_page_build(&$page) {
     // hence it will also clear this cache entry.
     cache_set("quickedit_user_permissions_hash:$serialized_roles", $permissions_hash, 'cache_page', CACHE_TEMPORARY);
   }
-  $page['header']['#attached']['js'][] = array(
+  $page['page_top']['#attached']['js'][] = array(
     'type' => 'setting',
     'data' => array('quickedit' => array('user' => array(
       'uid' => $user->uid,
@@ -164,7 +164,7 @@ function quickedit_theme() {
 function quickedit_library() {
   $path = drupal_get_path('module', 'quickedit');
   $options = array(
-   
+    'scope' => 'footer',
   );
   $libraries['quickedit'] = array(
     'title' => 'Quick Edit: in-place editing',

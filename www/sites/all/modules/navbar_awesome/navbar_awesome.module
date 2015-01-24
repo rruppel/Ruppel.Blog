@@ -71,6 +71,7 @@ function navbar_awesome_menu() {
  */
 function navbar_awesome_page_alter(&$page) {
 
+  if(user_access('access navbar')){
   // First check if using Libraries to load Font Awesome
   // @todo: Verify if other contribs are using same naming to prevent overlap.
   if (module_exists('libraries') && ($library = libraries_detect('fontawesome')) && !empty($library['installed'])) {
@@ -94,6 +95,8 @@ function navbar_awesome_page_alter(&$page) {
   drupal_add_css(drupal_get_path('module', 'navbar_awesome') . '/css/navbar-awesome.css');
   // Add JS behaviors to handle icons for buttons added via JavaScript.
   drupal_add_js(drupal_get_path('module', 'navbar_awesome') . '/js/navbar-awesome.js');
+  
+  }
 }
 
 /**
